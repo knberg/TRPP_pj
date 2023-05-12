@@ -1,0 +1,28 @@
+@startuml
+class barbershop.controller.RegistrationController {
+- UserService userService
++ <<Create>> RegistrationController(UserService)
++ String getRegistration()
++ UserRegistrationDto userRegistrationDto()
++ String registerUserAccount(UserRegistrationDto,BindingResult,String)
+}
+class barbershop.controller.BasketController {
+- BasketService basketService
++ <<Create>> BasketController(BasketService)
++ ModelAndView getBasket()
++ String deleteBasket(String)
++ String deleteBasket()
+}
+class barbershop.controller.MainController {
++ String getHome()
++ String getLogin()
+}
+class barbershop.controller.BookController {
+- BookService bookService
+- BasketService basketService
++ <<Create>> BookController(BookService,BasketService)
++ ModelAndView getBooks(String)
++ ModelAndView getBook(String,String)
++ ModelAndView addBook(String,String)
+}
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+class barbershop.test.services.AccountServiceTest {
+- UserRepository userRepository
+- BookRepository bookRepository
+- ArgumentCaptor<Book> captor
+- BasketServiceImpl basketService
++ void setBasketService(BasketServiceImpl)
++ void init()
++ void getBooks()
++ void addBook()
++ void deleteBook()
++ void buy()
+}
+class barbershop.test.services.AppointmentServiceTest {
+- BookRepository bookRepository
+- UserRepository userRepository
+- ArgumentCaptor<Book> captor
+- BookServiceImpl bookService
+- BasketServiceImpl basketService
+- List<Book> books
++ void setBookService(BookServiceImpl)
++ void setBasketService(BasketServiceImpl)
++ void init()
++ void getByCategory()
++ void getByName()
+}
+class barbershop.test.ApplicationTest {
+~ void contextLoads()
+}
+class barbershop.test.services.UserServiceTest {
+- UserRepository userRepository
+- UserService userService
+- ArgumentCaptor<User> captor
++ void setUserAuthService(UserService)
++ void init()
++ void UserShouldBeRegister()
++ void UserShouldBeFound()
+}
+@enduml

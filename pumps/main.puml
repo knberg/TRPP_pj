@@ -1,0 +1,147 @@
+@startuml
+interface barbershop.service.BasketService {
+~ void addBook(Book)
+~ List<Book> getBooks()
+~ List<Book> getSetOfBook(List<Book>)
+~ List<String> getCounts(List<Book>,List<Book>)
+~ Integer getPrice(List<Book>)
+~ Double getStock(List<Book>)
+~ void deleteBook(String)
+~ void buy()
+~ User getUser()
+}
+class barbershop.dao.entity.Role {
+- Long id
+- String name
++ <<Create>> Role()
++ <<Create>> Role(Long,String)
+}
+class barbershop.controller.RegistrationController {
+- UserService userService
++ UserRegistrationDto userRegistrationDto()
++ String showRegistrationForm(Model)
++ String registerUserAccount(UserRegistrationDto,BindingResult,String)
+}
+class barbershop.dao.entity.Book {
+- Long id
+~ String category
+~ String name
+~ String image
+~ String author
+~ int price
+~ String description
+~ int quantity
+- Set<User> baskets
+}
+interface barbershop.service.UserService {
+~ User getByLogin(String)
+~ void createUser(UserRegistrationDto,String)
+}
+class barbershop.Application {
++ {static} void main(String[])
+}
+interface barbershop.dao.repos.UserRepository {
+~ User getByLogin(String)
+}
+interface barbershop.dao.repos.BookRepository {
+~ List<Book> getAllByCategory(String)
+~ Book getByName(String)
+}
+class barbershop.configs.Config {
++ SpringSecurityDialect springSecurityDialect()
+}
+class barbershop.configs.SecurityConfig {
+- UserService userService
+# void configure(HttpSecurity)
++ BCryptPasswordEncoder bCryptPasswordEncoder()
+# void configureGlobal(AuthenticationManagerBuilder)
+}
+class barbershop.service.impl.BasketServiceImpl {
+- UserRepository userRepository
+- BookRepository bookRepository
++ void addBook(Book)
++ List<Book> getBooks()
++ List<Book> getSetOfBook(List<Book>)
++ List<String> getCounts(List<Book>,List<Book>)
++ Integer getPrice(List<Book>)
++ Double getStock(List<Book>)
++ void deleteBook(String)
++ void buy()
++ User getUser()
+}
+class barbershop.dao.entity.UserRegistration {
+- String password
+- String login
+- Boolean terms
+}
+class barbershop.dao.entity.User {
+- long id
+- String login
+- String password
+- String sessionID
+- Collection<Role> roles
+- List<Book> books
++ <<Create>> User()
++ <<Create>> User(String,String)
++ <<Create>> User(String,Collection<Role>)
++ void addBook(Book)
++ void removeBook(Book)
+}
+class barbershop.controller.BasketController {
+- BasketService basketService
++ ModelAndView getBasket()
++ String deleteBasket(String)
++ String deleteBasket()
+}
+class barbershop.service.impl.UserServiceImpl {
+- UserRepository userRepository
+- BCryptPasswordEncoder passwordEncoder
++ User getByLogin(String)
++ void createUser(UserRegistrationDto,String)
++ UserDetails loadUserByUsername(String)
+- Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role>)
+}
+class barbershop.service.impl.BookServiceImpl {
+- BookRepository bookRepository
++ List<Book> getAllByCategory(String)
++ Book getByName(List<Book>,String)
+}
+class barbershop.controller.MainController {
++ String getHome()
++ String login(Model)
++ String getError()
+}
+interface barbershop.service.BookService {
+~ List<Book> getAllByCategory(String)
+~ Book getByName(List<Book>,String)
+}
+class barbershop.controller.BookController {
+- BookService bookService
+- BasketService basketService
++ ModelAndView getBooks(String)
++ ModelAndView getBook(String,String)
++ ModelAndView addBook(String,String)
+}
+
+
+org.springframework.security.core.userdetails.UserDetailsService <|-- barbershop.service.UserService
+org.springframework.data.jpa.repository.JpaRepository <|-- barbershop.dao.repos.UserRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- barbershop.dao.repos.BookRepository
+org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter <|-- barbershop.configs.SecurityConfig
+barbershop.service.BasketService <|.. barbershop.service.impl.BasketServiceImpl
+barbershop.service.UserService <|.. barbershop.service.impl.UserServiceImpl
+barbershop.service.BookService <|.. barbershop.service.impl.BookServiceImpl
+
+barbershop.configs.SecurityConfig ..o barbershop.service.UserService
+barbershop.controller.BookController ..o barbershop.service.BookService
+barbershop.controller.BookController ..o barbershop.service.BasketService
+barbershop.controller.BasketController ..o barbershop.service.BasketService
+barbershop.controller.RegistrationController ..o barbershop.service.UserService
+barbershop.dao.repos.BookRepository --o barbershop.dao.entity.Book
+barbershop.dao.repos.UserRepository --o barbershop.dao.entity.User
+barbershop.dao.entity.User --o barbershop.dao.entity.Role
+barbershop.service.impl.UserServiceImpl ..o barbershop.dao.repos.UserRepository
+barbershop.service.impl.BasketServiceImpl ..o barbershop.dao.repos.UserRepository
+barbershop.service.impl.BasketServiceImpl ..o barbershop.dao.repos.BookRepository
+barbershop.service.impl.BookServiceImpl ..o barbershop.dao.repos.BookRepository
+@enduml
