@@ -18,6 +18,12 @@ public class AppointmentServiceImpl implements AppointmentService {
         this.appointmentRepository = appointmentRepository;
     }
 
+    /**
+     * Возвращает все зарезервированные времена по заданным дате и барберу
+     * @param date Это дата в формате строки
+     * @param master Это мастер в формате строки
+     * @return возвращает зарезервированные времена
+     */
     @Override
     public List<String> getReservedTimes(String date, String master) {
         List<Appointment> appointments = appointmentRepository.getByDateAndMaster(date, master);
