@@ -7,6 +7,11 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Класс пользователь. Создаётся в момент регистрации нового пользователя на сайте.
+ * Создаёт в базе данных таблицу с названием users.
+ */
+
 @Entity
 @Table(name = "users")
 @Setter
@@ -35,10 +40,12 @@ public class User {
     @Column(name = "session_id")
     private String sessionID;
 
+    /** Поле роль. Определяет права доступа к системе */
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
+    /** Поле записи. Хранит список записей для конкретного клиента */
     @OneToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "user_appointments", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "appointment_id"))
     private List<Appointment> appointments;
@@ -46,6 +53,7 @@ public class User {
     public User() {
     }
 
+    /** Конструктор пользователя. */
     public User(String login, String password, String phone, String name, String email) {
         this.login = login;
         this.password = password;
@@ -54,11 +62,6 @@ public class User {
         this.name = name;
     }
 
-    public User(String password, Collection<Role> roles) {
-        this.login = login;
-        this.password = password;
-        this.roles = roles;
-    }
 
     public void addAppointment(Appointment appointment) {
         this.appointments.add(appointment);
